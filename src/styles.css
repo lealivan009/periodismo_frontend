@@ -747,6 +747,43 @@ textarea {
   margin-top: 16px;
 }
 
+.profile-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 0;
+  margin: 18px 0 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 112px;
+  padding-right: 22px;
+  margin-right: 22px;
+  border-right: 1px solid var(--line);
+}
+
+.profile-stats li:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border-right: 0;
+}
+
+.profile-stats strong {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.profile-stats span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .profile-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1470,7 +1507,9 @@ a.btn-ghost {
 }
 
 .news-card {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--line);
@@ -1482,6 +1521,7 @@ a.btn-ghost {
 
 .news-card img,
 .news-card-fallback {
+  flex: 0 0 160px;
   width: 100%;
   height: 160px;
   object-fit: cover;
@@ -1490,7 +1530,9 @@ a.btn-ghost {
 }
 
 .news-card-body {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   gap: 8px;
   padding: 18px;
 }
@@ -1516,8 +1558,13 @@ a.btn-ghost {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 16px;
+  margin: 0;
   color: var(--muted);
   font-size: 13px;
+}
+
+.news-card p.news-card-meta {
+  margin-top: auto;
 }
 
 .article-layout h1 {
@@ -1549,6 +1596,24 @@ a.btn-ghost {
 
 .article-body a {
   text-decoration: underline;
+}
+
+.article-video {
+  position: relative;
+  width: 100%;
+  margin: 16px 0;
+  aspect-ratio: 16 / 9;
+  background: #10141a;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.article-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .editor {
@@ -1733,8 +1798,11 @@ a.btn-ghost {
 }
 
 .journalist-card-stats {
+  display: flex;
+  flex-wrap: wrap;
   margin: 6px 0 0;
-  gap: 6px 12px;
+  gap: 4px 12px;
+  color: var(--muted);
   font-size: 12px;
 }
 

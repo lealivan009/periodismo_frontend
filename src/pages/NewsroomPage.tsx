@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
-import { formatViews } from "../api/types";
+import { formatDateTime, formatViews } from "../api/types";
 import type { Article } from "../api/types";
 import { canPublish, verificationLabel } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
@@ -143,7 +143,7 @@ export function NewsroomPage() {
                       <td>{article.title}</td>
                       <td>{statusLabel[article.status]}</td>
                       <td>{formatViews(article.viewCount)}</td>
-                      <td>{new Date(article.updatedAt).toLocaleString("es-AR")}</td>
+                      <td>{formatDateTime(article.updatedAt)}</td>
                       <td className="actions">
                         <Link className="text-btn" to={`/app/redaccion/${article.id}`}>
                           Editar

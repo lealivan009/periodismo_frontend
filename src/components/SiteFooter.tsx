@@ -67,7 +67,7 @@ export function SiteFooter() {
           <p className="site-footer-label">El diario</p>
           <nav aria-label="El diario">
             <Link to="/">Portada</Link>
-            <Link to="/periodistas">Profesionales</Link>
+            <Link to="/profesionales">Profesionales</Link>
           </nav>
         </div>
       </div>

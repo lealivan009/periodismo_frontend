@@ -4,6 +4,7 @@ import { api } from "../api/client";
 import {
   displayName,
   emptyProfile,
+  formatDateTime,
   profileFromUser,
   profilePayload,
   roleLabel,
@@ -14,16 +15,6 @@ import { useAuth } from "../auth/AuthContext";
 import { Field } from "../components/AuthForm";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { ProfileFields } from "../components/ProfileFields";
-
-function formatDateTime(value: string | null | undefined) {
-  if (!value) {
-    return "—";
-  }
-  return new Date(value).toLocaleString("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
-}
 
 function formatDate(value: string | null | undefined) {
   if (!value) {

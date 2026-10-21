@@ -189,7 +189,7 @@ export function ProfilePage() {
               placeholder="hugovidela"
             />
             <p className="lede">
-              Tu perfil público queda en /periodistas/{username.trim().replace(/^@/, "") || "usuario"}.
+              Tu perfil público queda en /profesionales/{username.trim().replace(/^@/, "") || "usuario"}.
             </p>
             <Field id="profileSpecialty" label="Especialidad" value={specialty} onChange={setSpecialty} required={false} />
             <h2>Redes</h2>

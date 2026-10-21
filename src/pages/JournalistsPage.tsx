@@ -85,9 +85,13 @@ export function JournalistsPage() {
                         <VerifiedBadge />
                       </h2>
                       {journalist.username ? <p className="profile-handle">@{journalist.username}</p> : null}
-                      <p className="news-card-meta journalist-card-stats">
-                        <span>{journalist.followers} seguidores</span>
-                        <span>{journalist.subscribers} suscriptores</span>
+                      <p className="journalist-card-stats">
+                        <span>
+                          {journalist.followers} {journalist.followers === 1 ? "seguidor" : "seguidores"}
+                        </span>
+                        <span>
+                          {journalist.subscribers} {journalist.subscribers === 1 ? "suscriptor" : "suscriptores"}
+                        </span>
                       </p>
                     </div>
                   </div>

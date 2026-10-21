@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
 import type { ArticleStatus, Category } from "../api/types";
@@ -20,6 +20,8 @@ export function EditorPage() {
   const [categoryId, setCategoryId] = useState("");
   const [status, setStatus] = useState<ArticleStatus>("DRAFT");
   const [cover, setCover] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const pendingCover = useRef<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(!isNew);
@@ -102,8 +104,18 @@ export function EditorPage() {
     };
     if (isNew || !id) {
       const created = await api.createArticle(payload);
-      navigate(`/app/redaccion/${created.id}`, { replace: true });
-      return created;
+      const file = pendingCover.current;
+      pendingCover.current = null;
+      let saved = created;
+      try {
+        if (file) {
+          saved = await api.uploadCover(created.id, file);
+        }
+      } finally {
+        setPreview(null);
+        navigate(`/app/redaccion/${created.id}`, { replace: true });
+      }
+      return saved;
     }
     return api.updateArticle(id, payload);
   }
@@ -115,6 +127,9 @@ export function EditorPage() {
     try {
       const saved = await persist();
       setStatus(saved.status);
+      if (saved.coverImageUrl) {
+        setCover(saved.coverImageUrl);
+      }
       setNotice("Borrador guardado");
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo guardar");
@@ -142,15 +157,37 @@ export function EditorPage() {
   }
 
   async function onCover(file: File) {
-    if (isNew || !id) {
-      setError("Guardá el borrador antes de subir la tapa");
+    setError(null);
+    setNotice(null);
+    if (!isNew && id) {
+      setSaving(true);
+      try {
+        const updated = await api.uploadCover(id, file);
+        setCover(updated.coverImageUrl);
+        setNotice("Tapa actualizada");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "No se pudo subir la tapa");
+      } finally {
+        setSaving(false);
+      }
+      return;
+    }
+    pendingCover.current = file;
+    setPreview((current) => {
+      if (current) {
+        URL.revokeObjectURL(current);
+      }
+      return URL.createObjectURL(file);
+    });
+    if (!readyToSave(title, content, categoryId)) {
+      setNotice("La imagen se sube al guardar la nota.");
       return;
     }
     setSaving(true);
-    setError(null);
     try {
-      const updated = await api.uploadCover(id, file);
-      setCover(updated.coverImageUrl);
+      const saved = await persist();
+      setStatus(saved.status);
+      setCover(saved.coverImageUrl);
       setNotice("Tapa actualizada");
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo subir la tapa");
@@ -163,7 +200,7 @@ export function EditorPage() {
     return <p className="lede">Cargando editor…</p>;
   }
 
-  const coverSrc = mediaUrl(cover);
+  const coverSrc = preview ?? mediaUrl(cover);
 
   return (
     <>
@@ -195,6 +232,7 @@ export function EditorPage() {
             id="cover"
             type="file"
             accept="image/jpeg,image/png,image/webp"
+            disabled={saving}
             onChange={(event) => {
               const file = event.target.files?.[0];
               event.target.value = "";
@@ -225,4 +263,19 @@ export function EditorPage() {
       />
     </>
   );
+}
+
+function readyToSave(title: string, content: string, categoryId: string) {
+  if (title.trim().length < 4 || !categoryId) {
+    return false;
+  }
+  if (content.includes("article-video") || content.includes("youtube-nocookie.com/embed/")) {
+    return true;
+  }
+  const text = content
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > 0;
 }

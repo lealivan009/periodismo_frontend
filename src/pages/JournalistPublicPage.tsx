@@ -86,7 +86,7 @@ export function JournalistPublicPage() {
     return (
       <section className="session-card">
         <p className="alert">{error}</p>
-        <Link to="/periodistas">Volver al listado</Link>
+        <Link to="/profesionales">Volver al listado</Link>
       </section>
     );
   }
@@ -123,11 +123,20 @@ export function JournalistPublicPage() {
         <div className="profile-hero-body">
             {profile.bio ? <p className="profile-description">{profile.bio}</p> : null}
             <SocialLinks xUrl={profile.xUrl} instagramUrl={profile.instagramUrl} facebookUrl={profile.facebookUrl} />
-            <p className="news-card-meta">
-              <span>{notesLabel(profile.articleCount ?? profile.articles.length)}</span>
-              <span>{profile.followers} seguidores</span>
-              <span>{profile.subscribers} suscriptores</span>
-            </p>
+            <ul className="profile-stats">
+              <li>
+                <strong>{profile.articleCount ?? profile.articles.length}</strong>
+                <span>{(profile.articleCount ?? profile.articles.length) === 1 ? "nota" : "notas"}</span>
+              </li>
+              <li>
+                <strong>{profile.followers}</strong>
+                <span>{profile.followers === 1 ? "seguidor" : "seguidores"}</span>
+              </li>
+              <li>
+                <strong>{profile.subscribers}</strong>
+                <span>{profile.subscribers === 1 ? "suscriptor" : "suscriptores"}</span>
+              </li>
+            </ul>
             {ownProfile ? null : (
               <div className="form-actions">
                 {user ? (
@@ -178,8 +187,4 @@ export function JournalistPublicPage() {
       )}
     </>
   );
-}
-
-function notesLabel(count: number) {
-  return count === 1 ? "1 nota" : `${count} notas`;
 }

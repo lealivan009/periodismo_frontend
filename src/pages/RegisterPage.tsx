@@ -141,7 +141,7 @@ export function RegisterPage() {
               placeholder="hugovidela"
               autoComplete="off"
             />
-            <p className="lede">Obligatorio y único. El perfil queda en /periodistas/{handlePreview(username)}.</p>
+            <p className="lede">Obligatorio y único. El perfil queda en /profesionales/{handlePreview(username)}.</p>
             <Field id="specialty" label="Especialidad" value={specialty} onChange={setSpecialty} />
             <label className="field" htmlFor="bio">
               <span className="field-label">Descripción</span>

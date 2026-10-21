@@ -2,22 +2,12 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
 import type { Role, User } from "../api/types";
-import { roleLabel } from "../api/types";
+import { formatDateTime, roleLabel } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { Field } from "../components/AuthForm";
 import { PasswordHint } from "../components/PasswordHint";
 
 const PAGE_SIZES = [10, 25, 50] as const;
-
-function formatDate(value: string | null | undefined) {
-  if (!value) {
-    return "—";
-  }
-  return new Date(value).toLocaleString("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
-}
 
 export function UsersPage() {
   const { user: me } = useAuth();
@@ -301,7 +291,7 @@ export function UsersPage() {
                             {user.enabled === false ? "Inactivo" : "Activo"}
                           </span>
                         </td>
-                        <td>{formatDate(user.lastLoginAt)}</td>
+                        <td>{formatDateTime(user.lastLoginAt)}</td>
                         <td className="actions">
                           <Link className="text-btn" to={`/app/users/${user.id}`}>
                             Ver

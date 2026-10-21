@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { AdminRoute } from "./auth/AdminRoute";
 import { GuestRoute } from "./auth/GuestRoute";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -23,6 +23,11 @@ import { UserDetailPage } from "./pages/UserDetailPage";
 import { UsersPage } from "./pages/UsersPage";
 import { VerifyJournalistsPage } from "./pages/VerifyJournalistsPage";
 
+function LegacyJournalistRedirect() {
+  const { id } = useParams();
+  return <Navigate to={id ? `/profesionales/${id}` : "/profesionales"} replace />;
+}
+
 export function App() {
   return (
     <Routes>
@@ -30,8 +35,10 @@ export function App() {
         <Route path="/" element={<FrontPage />} />
         <Route path="/categoria/:slug" element={<FrontPage />} />
         <Route path="/nota/:slug" element={<ArticlePage />} />
-        <Route path="/periodistas" element={<JournalistsPage />} />
-        <Route path="/periodistas/:id" element={<JournalistPublicPage />} />
+        <Route path="/profesionales" element={<JournalistsPage />} />
+        <Route path="/profesionales/:id" element={<JournalistPublicPage />} />
+        <Route path="/periodistas" element={<Navigate to="/profesionales" replace />} />
+        <Route path="/periodistas/:id" element={<LegacyJournalistRedirect />} />
       </Route>
       <Route element={<GuestRoute />}>
         <Route path="/login" element={<LoginPage />} />

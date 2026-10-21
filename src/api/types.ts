@@ -133,7 +133,19 @@ export interface ArticleSummary {
 
 export function journalistPath(person: { id: string; username?: string | null }) {
   const handle = person.username?.trim().replace(/^@/, "");
-  return `/periodistas/${handle || person.id}`;
+  return `/profesionales/${handle || person.id}`;
+}
+
+export function formatDateTime(value: string | null | undefined) {
+  if (!value) {
+    return "—";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+  const pad = (part: number) => String(part).padStart(2, "0");
+  return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}, ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 export function formatViews(count: number | null | undefined) {

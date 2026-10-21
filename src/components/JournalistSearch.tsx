@@ -32,7 +32,7 @@ export function JournalistSearch() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (location.pathname === "/periodistas") {
+    if (location.pathname === "/profesionales") {
       setQuery(params.get("q") ?? "");
     }
   }, [location.pathname, location.search]);
@@ -75,7 +75,7 @@ export function JournalistSearch() {
     event.preventDefault();
     setOpen(false);
     const next = query.trim();
-    navigate(next ? `/periodistas?q=${encodeURIComponent(next)}` : "/periodistas");
+    navigate(next ? `/profesionales?q=${encodeURIComponent(next)}` : "/profesionales");
   }
 
   return (

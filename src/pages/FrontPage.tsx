@@ -50,7 +50,7 @@ export function FrontPage() {
               <h2>Todavía no hay notas para vos</h2>
               <p className="lede">Seguí a los profesionales que te interesan para ver sus notas en la portada.</p>
               <p>
-                <Link to="/periodistas">Ver profesionales</Link>
+                <Link to="/profesionales">Ver profesionales</Link>
               </p>
             </>
           ) : (

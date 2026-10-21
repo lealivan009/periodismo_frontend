@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { api } from "../api/client";
-import { displayName, type ArticleSummary, type Category, type JournalistApplication } from "../api/types";
+import { displayName, formatDateTime, type ArticleSummary, type Category, type JournalistApplication } from "../api/types";
 import { Field } from "../components/AuthForm";
-
-function formatDate(value: string) {
-  return new Date(value).toLocaleString("es-AR", { dateStyle: "short", timeStyle: "short" });
-}
 
 export function VerifyJournalistsPage() {
   const [applications, setApplications] = useState<JournalistApplication[]>([]);
@@ -134,7 +130,7 @@ export function VerifyJournalistsPage() {
                     <td>{displayName(application)}</td>
                     <td>{application.email}</td>
                     <td>{application.specialty || "—"}</td>
-                    <td>{formatDate(application.createdAt)}</td>
+                    <td>{formatDateTime(application.createdAt)}</td>
                     <td className="actions">
                       <button
                         type="button"
