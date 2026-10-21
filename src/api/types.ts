@@ -178,6 +178,7 @@ export interface JournalistCard {
 export interface JournalistProfile extends JournalistCard {
   following: boolean;
   subscribed: boolean;
+  articleCount?: number;
   articles: ArticleSummary[];
 }
 

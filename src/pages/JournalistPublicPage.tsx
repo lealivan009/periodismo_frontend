@@ -111,6 +111,7 @@ export function JournalistPublicPage() {
             {profile.bio ? <p className="profile-description">{profile.bio}</p> : null}
             <SocialLinks xUrl={profile.xUrl} instagramUrl={profile.instagramUrl} facebookUrl={profile.facebookUrl} />
             <p className="news-card-meta">
+              <span>{notesLabel(profile.articleCount ?? profile.articles.length)}</span>
               <span>{profile.followers} seguidores</span>
               <span>{profile.subscribers} suscriptores</span>
             </p>
@@ -164,4 +165,8 @@ export function JournalistPublicPage() {
       )}
     </>
   );
+}
+
+function notesLabel(count: number) {
+  return count === 1 ? "1 nota" : `${count} notas`;
 }
