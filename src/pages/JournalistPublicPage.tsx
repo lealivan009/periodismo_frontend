@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
-import { displayName, type JournalistProfile, type RelationState } from "../api/types";
+import { displayName, journalistPath, type JournalistProfile, type RelationState } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { ArticleCard } from "../components/ArticleCard";
 import { SocialLinks } from "../components/SocialLinks";
@@ -9,6 +9,7 @@ import { VerifiedBadge } from "../components/VerifiedBadge";
 
 export function JournalistPublicPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [profile, setProfile] = useState<JournalistProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +39,12 @@ export function JournalistPublicPage() {
       cancelled = true;
     };
   }, [id, user?.id]);
+
+  useEffect(() => {
+    if (profile?.username && id !== profile.username) {
+      navigate(journalistPath(profile), { replace: true });
+    }
+  }, [id, navigate, profile]);
 
   useEffect(() => {
     if (!notice) {
@@ -85,7 +92,7 @@ export function JournalistPublicPage() {
 
   const photo = mediaUrl(profile.avatarUrl);
   const ownProfile = user?.id === profile.id;
-  const loginNext = `/login?next=${encodeURIComponent(`/periodistas/${profile.id}`)}`;
+  const loginNext = `/login?next=${encodeURIComponent(journalistPath(profile))}`;
 
   return (
     <>
@@ -105,6 +112,7 @@ export function JournalistPublicPage() {
               {displayName(profile)}
               <VerifiedBadge />
             </h1>
+            {profile.username ? <p className="profile-handle">@{profile.username}</p> : null}
           </div>
         </div>
         <div className="profile-hero-body">

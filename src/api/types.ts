@@ -29,6 +29,7 @@ export interface User extends ProfileFields {
   instagramUrl?: string | null;
   facebookUrl?: string | null;
   verificationStatus: VerificationStatus;
+  username?: string | null;
 }
 
 export interface ProfileForm {
@@ -127,6 +128,12 @@ export interface ArticleSummary {
   authorId: string;
   authorName: string;
   viewCount: number;
+  authorUsername?: string | null;
+}
+
+export function journalistPath(person: { id: string; username?: string | null }) {
+  const handle = person.username?.trim().replace(/^@/, "");
+  return `/periodistas/${handle || person.id}`;
 }
 
 export function formatViews(count: number | null | undefined) {
@@ -165,6 +172,7 @@ export interface JournalistCard {
   id: string;
   firstName: string;
   lastName: string;
+  username?: string | null;
   bio: string | null;
   specialty: string | null;
   avatarUrl: string | null;

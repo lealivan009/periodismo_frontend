@@ -12,6 +12,7 @@ export function ProfilePage() {
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const [username, setUsername] = useState("");
   const [xUrl, setXUrl] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [facebookUrl, setFacebookUrl] = useState("");
@@ -28,6 +29,7 @@ export function ProfilePage() {
     setLastName(user.lastName ?? "");
     setBio(user.bio ?? "");
     setSpecialty(user.specialty ?? "");
+    setUsername(user.username ?? "");
     setXUrl(user.xUrl ?? "");
     setInstagramUrl(user.instagramUrl ?? "");
     setFacebookUrl(user.facebookUrl ?? "");
@@ -53,6 +55,7 @@ export function ProfilePage() {
         xUrl: xUrl.trim(),
         instagramUrl: instagramUrl.trim(),
         facebookUrl: facebookUrl.trim(),
+        ...(user?.role === "JOURNALIST" ? { username: username.trim().replace(/^@/, "") } : {}),
       });
       setNotice("Perfil actualizado");
     } catch (err) {
@@ -109,6 +112,16 @@ export function ProfilePage() {
                 onChange={(event) => setBio(event.target.value)}
               />
             </label>
+            <Field
+              id="profileUsername"
+              label="Usuario"
+              value={username}
+              onChange={setUsername}
+              placeholder="hugovidela"
+            />
+            <p className="lede">
+              Tu perfil público queda en /periodistas/{username.trim().replace(/^@/, "") || "usuario"}.
+            </p>
             <Field id="profileSpecialty" label="Especialidad" value={specialty} onChange={setSpecialty} required={false} />
             <h2>Redes</h2>
             <p className="lede">Opcional. Pegá el usuario o el enlace del perfil. Si lo dejás vacío, no se muestra.</p>

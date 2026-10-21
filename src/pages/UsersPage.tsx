@@ -33,6 +33,7 @@ export function UsersPage() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("READER");
   const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [creating, setCreating] = useState(false);
 
   const [searchInput, setSearchInput] = useState("");
@@ -88,6 +89,11 @@ export function UsersPage() {
 
   async function onCreate(event: FormEvent) {
     event.preventDefault();
+    const handle = username.trim().replace(/^@/, "");
+    if (role === "JOURNALIST" && !handle) {
+      setError("El usuario es obligatorio para un periodista");
+      return;
+    }
     setError(null);
     setNotice(null);
     setCreating(true);
@@ -99,6 +105,7 @@ export function UsersPage() {
         password,
         role,
         phone: phone.trim() || null,
+        ...(role === "JOURNALIST" ? { username: handle } : {}),
       });
       setFirstName("");
       setLastName("");
@@ -106,6 +113,7 @@ export function UsersPage() {
       setPassword("");
       setRole("READER");
       setPhone("");
+      setUsername("");
       setNotice("Usuario creado");
       setSearchInput("");
       setQuery("");
@@ -161,6 +169,16 @@ export function UsersPage() {
             autoComplete="off"
             required={false}
           />
+          {role === "JOURNALIST" ? (
+            <Field
+              id="newUsername"
+              label="Usuario"
+              value={username}
+              onChange={setUsername}
+              autoComplete="off"
+              placeholder="hugovidela"
+            />
+          ) : null}
           <label className="field" htmlFor="newRole">
             <span className="field-label">Rol</span>
             <select id="newRole" value={role} onChange={(event) => setRole(event.target.value as Role)}>
@@ -188,7 +206,7 @@ export function UsersPage() {
             <input
               id="userSearch"
               type="search"
-              placeholder="Nombre, email o celular"
+              placeholder="Nombre, usuario, email o celular"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
               autoComplete="off"
@@ -258,6 +276,7 @@ export function UsersPage() {
                   <tr>
                     <th>Apellido</th>
                     <th>Nombre</th>
+                    <th>Usuario</th>
                     <th>Email</th>
                     <th>Celular</th>
                     <th>Rol</th>
@@ -273,6 +292,7 @@ export function UsersPage() {
                       <tr key={user.id}>
                         <td>{user.lastName}</td>
                         <td>{user.firstName}</td>
+                        <td>{user.username ? `@${user.username}` : "—"}</td>
                         <td>{user.email}</td>
                         <td>{user.phone || "—"}</td>
                         <td>{roleLabel(user.role)}</td>

@@ -167,6 +167,7 @@ export class ApiClient {
       xUrl?: string | null;
       instagramUrl?: string | null;
       facebookUrl?: string | null;
+      username?: string | null;
     } & ProfileFields
   ) {
     return this.request<User>("/api/auth/me", {
@@ -207,7 +208,14 @@ export class ApiClient {
   }
 
   createUser(
-    input: { firstName: string; lastName: string; email: string; password: string; role: Role } & ProfileFields
+    input: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      role: Role;
+      username?: string | null;
+    } & ProfileFields
   ) {
     return this.request<User>("/api/users", {
       method: "POST",

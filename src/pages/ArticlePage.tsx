@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
-import { formatViews, type Article } from "../api/types";
+import { formatViews, journalistPath, type Article } from "../api/types";
 
 export function ArticlePage() {
   const { slug } = useParams();
@@ -72,7 +72,9 @@ export function ArticlePage() {
       </p>
       <h1>{article.title}</h1>
       <p className="news-card-meta">
-        <Link to={`/periodistas/${article.authorId}`}>{article.authorName}</Link>
+        <Link to={journalistPath({ id: article.authorId, username: article.authorUsername })}>
+          {article.authorName}
+        </Link>
         <span>{formatViews(article.viewCount)}</span>
         {article.publishedAt ? <span>{new Date(article.publishedAt).toLocaleString("es-AR")}</span> : null}
       </p>

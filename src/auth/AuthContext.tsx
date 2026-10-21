@@ -25,6 +25,7 @@ interface AuthContextValue {
       xUrl?: string | null;
       instagramUrl?: string | null;
       facebookUrl?: string | null;
+      username?: string | null;
     } & ProfileFields
   ) => Promise<void>;
   updateAvatar: (file: File) => Promise<void>;

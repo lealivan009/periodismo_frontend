@@ -17,6 +17,7 @@ export function RegisterPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [bio, setBio] = useState("");
   const [degree, setDegree] = useState<File | null>(null);
@@ -28,6 +29,11 @@ export function RegisterPage() {
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
+    const handle = username.trim().replace(/^@/, "");
+    if (kind === "JOURNALIST" && !handle) {
+      setError("Elegí un nombre de usuario");
+      return;
+    }
     if (kind === "JOURNALIST" && !degree) {
       setError("Adjuntá el título o la matrícula profesional");
       return;
@@ -40,6 +46,7 @@ export function RegisterPage() {
         form.set("lastName", lastName.trim());
         form.set("email", email.trim());
         form.set("password", password);
+        form.set("username", handle);
         form.set("specialty", specialty.trim());
         form.set("bio", bio.trim());
         appendProfile(form, profile);
@@ -126,6 +133,15 @@ export function RegisterPage() {
         <PasswordHint />
         {kind === "JOURNALIST" ? (
           <>
+            <Field
+              id="username"
+              label="Usuario"
+              value={username}
+              onChange={setUsername}
+              placeholder="hugovidela"
+              autoComplete="off"
+            />
+            <p className="lede">Obligatorio y único. El perfil queda en /periodistas/{handlePreview(username)}.</p>
             <Field id="specialty" label="Especialidad" value={specialty} onChange={setSpecialty} />
             <label className="field" htmlFor="bio">
               <span className="field-label">Descripción</span>
@@ -155,6 +171,10 @@ export function RegisterPage() {
       </AuthForm>
     </AuthLayout>
   );
+}
+
+function handlePreview(value: string) {
+  return value.trim().replace(/^@/, "") || "usuario";
 }
 
 function appendProfile(form: FormData, profile: ProfileForm) {

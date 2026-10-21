@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { mediaUrl } from "../api/client";
-import { formatViews, type ArticleSummary } from "../api/types";
+import { formatViews, journalistPath, type ArticleSummary } from "../api/types";
 
 export function ArticleCard({ article }: { article: ArticleSummary }) {
   const cover = mediaUrl(article.coverImageUrl);
@@ -14,7 +14,9 @@ export function ArticleCard({ article }: { article: ArticleSummary }) {
         </h2>
         {article.excerpt ? <p>{article.excerpt}</p> : null}
         <p className="news-card-meta">
-          <Link to={`/periodistas/${article.authorId}`}>{article.authorName}</Link>
+          <Link to={journalistPath({ id: article.authorId, username: article.authorUsername })}>
+            {article.authorName}
+          </Link>
           <span>{formatViews(article.viewCount)}</span>
           {article.publishedAt ? <span>{formatDate(article.publishedAt)}</span> : null}
         </p>

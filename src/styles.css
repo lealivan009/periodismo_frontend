@@ -508,6 +508,10 @@ textarea {
   font-size: 12px;
 }
 
+.nav-search-panel .search-handle {
+  color: var(--muted);
+}
+
 .user-menu {
   margin-left: auto;
   position: relative;
@@ -1662,6 +1666,12 @@ a.btn-ghost {
 
 .verified-badge circle {
   fill: currentColor;
+}
+
+.profile-handle {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .profile-description {

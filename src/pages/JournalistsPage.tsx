@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
-import { displayName, type JournalistCard } from "../api/types";
+import { displayName, journalistPath, type JournalistCard } from "../api/types";
 import { matchesJournalist } from "../components/JournalistSearch";
 import { SocialLinks } from "../components/SocialLinks";
 import { VerifiedBadge } from "../components/VerifiedBadge";
@@ -46,7 +46,7 @@ export function JournalistsPage() {
         <h1>{query ? `Resultados para “${query}”` : "Periodistas verificados"}</h1>
         <p className="lede">
           {query
-            ? "Coincidencias por nombre, especialidad o descripción."
+            ? "Coincidencias por nombre, usuario, especialidad o descripción."
             : "Solo se muestran periodistas verificados."}
         </p>
       </section>
@@ -69,7 +69,7 @@ export function JournalistsPage() {
             const initials = `${journalist.firstName?.[0] ?? ""}${journalist.lastName?.[0] ?? ""}`.toUpperCase();
             return (
               <article key={journalist.id} className="journalist-card">
-                <Link className="journalist-card-link" to={`/periodistas/${journalist.id}`}>
+                <Link className="journalist-card-link" to={journalistPath(journalist)}>
                   <div className="journalist-card-head">
                     {photo ? (
                       <img className="journalist-card-photo" src={photo} alt="" />
@@ -84,6 +84,7 @@ export function JournalistsPage() {
                         {displayName(journalist)}
                         <VerifiedBadge />
                       </h2>
+                      {journalist.username ? <p className="profile-handle">@{journalist.username}</p> : null}
                       <p className="news-card-meta journalist-card-stats">
                         <span>{journalist.followers} seguidores</span>
                         <span>{journalist.subscribers} suscriptores</span>

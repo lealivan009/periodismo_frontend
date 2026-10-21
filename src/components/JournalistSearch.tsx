@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
-import { displayName, type JournalistCard } from "../api/types";
+import { displayName, journalistPath, type JournalistCard } from "../api/types";
 
 function fold(value: string) {
   return value
@@ -12,12 +12,12 @@ function fold(value: string) {
 }
 
 export function matchesJournalist(journalist: JournalistCard, query: string) {
-  const needle = fold(query);
+  const needle = fold(query).replace(/^@+/, "");
   if (!needle) {
     return true;
   }
   const haystack = fold(
-    `${journalist.firstName} ${journalist.lastName} ${journalist.specialty ?? ""} ${journalist.bio ?? ""}`
+    `${journalist.firstName} ${journalist.lastName} ${journalist.username ?? ""} ${journalist.specialty ?? ""} ${journalist.bio ?? ""}`
   );
   return haystack.includes(needle);
 }
@@ -107,7 +107,7 @@ export function JournalistSearch() {
       {open ? (
         <div className="nav-search-panel" role="listbox" aria-label="Periodistas">
           {journalists === null ? <p>Buscando…</p> : null}
-          {journalists && matches.length === 0 ? <p>No hay periodistas con ese nombre.</p> : null}
+          {journalists && matches.length === 0 ? <p>No hay periodistas con ese nombre o usuario.</p> : null}
           {matches.map((journalist) => {
             const photo = mediaUrl(journalist.avatarUrl);
             const initials = `${journalist.firstName?.[0] ?? ""}${journalist.lastName?.[0] ?? ""}`.toUpperCase();
@@ -118,7 +118,7 @@ export function JournalistSearch() {
                 role="option"
                 onClick={() => {
                   setOpen(false);
-                  navigate(`/periodistas/${journalist.id}`);
+                  navigate(journalistPath(journalist));
                 }}
               >
                 {photo ? (
@@ -130,6 +130,7 @@ export function JournalistSearch() {
                 )}
                 <span>
                   <strong>{displayName(journalist)}</strong>
+                  {journalist.username ? <small className="search-handle">@{journalist.username}</small> : null}
                   <small>{journalist.specialty || "Periodista"}</small>
                 </span>
               </button>
