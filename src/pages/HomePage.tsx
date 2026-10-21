@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../api/client";
+import { api, mediaUrl } from "../api/client";
 import { displayName, roleLabel, type AppNotification, type User } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 
@@ -15,6 +15,7 @@ function profileScore(user: User) {
     user.city,
     user.province,
     user.postalCode,
+    user.avatarUrl,
   ];
   const filled = fields.filter((value) => Boolean(value && String(value).trim())).length;
   return Math.round((filled / fields.length) * 100);
@@ -48,6 +49,7 @@ export function HomePage() {
   }
 
   const score = profileScore(user);
+  const photo = mediaUrl(user.avatarUrl);
   const incomplete = score < 100;
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Buenos días" : hour < 19 ? "Buenas tardes" : "Buenas noches";
@@ -65,10 +67,14 @@ export function HomePage() {
           </p>
         </div>
         <div className="hero-home-side">
-          <span className="avatar xl" aria-hidden>
-            {(user.firstName?.[0] ?? "").toUpperCase()}
-            {(user.lastName?.[0] ?? "").toUpperCase()}
-          </span>
+          {photo ? (
+            <img className="avatar-photo xl" src={photo} alt="" />
+          ) : (
+            <span className="avatar xl" aria-hidden>
+              {(user.firstName?.[0] ?? "").toUpperCase()}
+              {(user.lastName?.[0] ?? "").toUpperCase()}
+            </span>
+          )}
           <p className="hero-home-email">{user.email}</p>
           <span className="pill on">{roleLabel(user.role)}</span>
         </div>

@@ -661,6 +661,11 @@ textarea {
   padding: 8px;
 }
 
+.hero-home-side .avatar-photo {
+  width: 72px;
+  height: 72px;
+}
+
 .hero-home-email {
   margin: 0;
   color: var(--muted);

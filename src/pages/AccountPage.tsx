@@ -39,10 +39,6 @@ export function AccountPage() {
   return (
     <>
       <section className="session-card">
-        <Link className="text-btn" to="/app">
-          ← Inicio
-        </Link>
-        <p className="eyebrow">Cuenta</p>
         <h1>Seguridad</h1>
         <p className="lede">Protegé tu acceso. Al cambiar la contraseña se cierran todas las sesiones.</p>
         <dl className="meta">
