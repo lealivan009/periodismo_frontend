@@ -90,8 +90,8 @@ export function JournalistSearch() {
         <input
           type="search"
           value={query}
-          placeholder="Buscar periodistas"
-          aria-label="Buscar periodistas"
+          placeholder="Buscar profesionales"
+          aria-label="Buscar profesionales"
           autoComplete="off"
           onFocus={() => {
             ensureLoaded();
@@ -105,9 +105,9 @@ export function JournalistSearch() {
         />
       </form>
       {open ? (
-        <div className="nav-search-panel" role="listbox" aria-label="Periodistas">
+        <div className="nav-search-panel" role="listbox" aria-label="Profesionales">
           {journalists === null ? <p>Buscando…</p> : null}
-          {journalists && matches.length === 0 ? <p>No hay periodistas con ese nombre o usuario.</p> : null}
+          {journalists && matches.length === 0 ? <p>No hay profesionales con ese nombre o usuario.</p> : null}
           {matches.map((journalist) => {
             const photo = mediaUrl(journalist.avatarUrl);
             const initials = `${journalist.firstName?.[0] ?? ""}${journalist.lastName?.[0] ?? ""}`.toUpperCase();
@@ -131,7 +131,7 @@ export function JournalistSearch() {
                 <span>
                   <strong>{displayName(journalist)}</strong>
                   {journalist.username ? <small className="search-handle">@{journalist.username}</small> : null}
-                  <small>{journalist.specialty || "Periodista"}</small>
+                  <small>{journalist.specialty || "Profesional"}</small>
                 </span>
               </button>
             );

@@ -4,17 +4,16 @@ export function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="shell">
       <aside className="brand-panel">
-        <div className="brand-mark">PV</div>
-        <p className="brand-kicker">Periódico</p>
-        <h2>Solo publica quien está verificado.</h2>
+        <p className="brand-kicker">Enfoque Digital</p>
+        <h2>Información confiable, de profesionales.</h2>
         <p>
-          Lectores, periodistas con título revisado y un administrador que aprueba cada solicitud.
-          Las secciones arrancan con Política, Economía, Deportes y las demás categorías del diario.
+          Lo que leés lo publicó alguien que sabe del tema, no una opinión al pasar. Puede ser un periodista, un
+          médico, un ingeniero, un docente u otro profesional.
         </p>
         <ul className="brand-points">
           <li>Registro de lector o periodista</li>
-          <li>Verificación del título</li>
-          <li>Notas, seguidores y suscripciones</li>
+          <li>Notas de profesionales</li>
+          <li>Seguidores y suscripciones</li>
         </ul>
       </aside>
       <main className="form-panel">{children}</main>

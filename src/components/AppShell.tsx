@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import { SiteFooter } from "./SiteFooter";
 import { UserMenu } from "./UserMenu";
 
 export function AppShell() {
@@ -11,8 +12,7 @@ export function AppShell() {
     <div className="app-shell">
       <header className="app-nav">
         <NavLink to="/" className="app-brand">
-          <span className="brand-mark sm">PV</span>
-          <strong>Periódico</strong>
+          <strong>Enfoque Digital</strong>
         </NavLink>
         <nav className="app-links">
           <NavLink to="/" end>
@@ -35,6 +35,7 @@ export function AppShell() {
       <main className="app-main">
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   );
 }

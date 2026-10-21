@@ -43,23 +43,23 @@ export function JournalistsPage() {
     <>
       <section className="session-card">
         <p className="eyebrow">Buscador</p>
-        <h1>{query ? `Resultados para “${query}”` : "Periodistas verificados"}</h1>
+        <h1>{query ? `Resultados para “${query}”` : "Profesionales"}</h1>
         <p className="lede">
           {query
             ? "Coincidencias por nombre, usuario, especialidad o descripción."
-            : "Solo se muestran periodistas verificados."}
+            : "Profesionales que publican información en el diario."}
         </p>
       </section>
       {error ? <p className="alert">{error}</p> : null}
       {loading ? <p className="lede">Cargando…</p> : null}
       {!loading && journalists.length === 0 ? (
         <section className="session-card">
-          <p className="lede">Cuando se apruebe el primer periodista, va a aparecer en este listado.</p>
+          <p className="lede">Cuando se apruebe el primer profesional, va a aparecer en este listado.</p>
         </section>
       ) : null}
       {!loading && journalists.length > 0 && visible.length === 0 ? (
         <section className="session-card">
-          <p className="lede">No hay periodistas con ese nombre.</p>
+          <p className="lede">No hay profesionales con ese nombre.</p>
         </section>
       ) : null}
       {visible.length > 0 ? (
@@ -79,7 +79,7 @@ export function JournalistsPage() {
                       </span>
                     )}
                     <div>
-                      <p className="eyebrow">{journalist.specialty || "Periodista"}</p>
+                      <p className="eyebrow">{journalist.specialty || "Profesional"}</p>
                       <h2>
                         {displayName(journalist)}
                         <VerifiedBadge />

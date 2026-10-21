@@ -63,7 +63,7 @@ export function HomePage() {
             {greeting}, {user.firstName}
           </h1>
           <p className="lede">
-            Tu panel. Desde acá vas a la portada, a tu perfil y, si sos periodista verificado, a la redacción.
+            Tu panel. Desde acá vas a la portada, a tu perfil y, si sos periodista, a la redacción.
           </p>
         </div>
         <div className="hero-home-side">
@@ -134,7 +134,7 @@ export function HomePage() {
             ▣
           </span>
           <strong>Portada</strong>
-          <p>Notas publicadas por periodistas verificados.</p>
+          <p>Información de profesionales que saben del tema.</p>
         </Link>
         <Link className="home-tile" to={canPublish(user) ? journalistPath(user) : "/app/profile"}>
           <span className="home-tile-icon" aria-hidden>

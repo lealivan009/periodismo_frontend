@@ -70,15 +70,15 @@ export function RegisterPage() {
         <div className="auth-card">
           <p className="eyebrow">Crear cuenta</p>
           <h1>¿Cómo vas a usar el periódico?</h1>
-          <p className="lede">Los lectores entran directo. Los periodistas quedan en revisión hasta que se valide el título.</p>
+          <p className="lede">Los lectores entran directo. Quienes publican quedan en revisión: tienen que saber del tema.</p>
           <div className="choice-grid">
             <button type="button" className="choice-card" onClick={() => setKind("READER")}>
               <strong>Lector</strong>
-              <span>Seguí periodistas y leé las notas publicadas.</span>
+              <span>Seguí profesionales y leé información de quien sabe del tema.</span>
             </button>
             <button type="button" className="choice-card" onClick={() => setKind("JOURNALIST")}>
-              <strong>Periodista</strong>
-              <span>Subí tu título. Publicás cuando un admin te apruebe.</span>
+              <strong>Profesional</strong>
+              <span>Publicás sobre lo que sabés, cuando se apruebe tu cuenta.</span>
             </button>
           </div>
           <p className="footer-links">
@@ -93,11 +93,11 @@ export function RegisterPage() {
     <AuthLayout>
       <AuthForm
         wide
-        title={kind === "JOURNALIST" ? "Cuenta de periodista" : "Cuenta de lector"}
+        title={kind === "JOURNALIST" ? "Cuenta de profesional" : "Cuenta de lector"}
         subtitle={
           kind === "JOURNALIST"
-            ? "El título queda visible solo para quien revisa la solicitud."
-            : "Registrate para seguir periodistas y leer el periódico."
+            ? "El documento queda visible solo para quien revisa la solicitud."
+            : "Registrate para seguir profesionales y leer información confiable."
         }
         error={error}
         submitting={submitting}

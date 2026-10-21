@@ -4,6 +4,7 @@ import { api } from "../api/client";
 import type { Category } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { JournalistSearch } from "./JournalistSearch";
+import { SiteFooter } from "./SiteFooter";
 import { UserMenu } from "./UserMenu";
 
 const SECTION_ORDER = [
@@ -50,8 +51,7 @@ export function PublicShell() {
     <div className="app-shell">
       <header className="app-nav">
         <NavLink to="/" className="app-brand" end>
-          <span className="brand-mark sm">PV</span>
-          <strong>Periódico</strong>
+          <strong>Enfoque Digital</strong>
         </NavLink>
         <nav className="app-links">
           <NavLink to="/" end>
@@ -80,6 +80,7 @@ export function PublicShell() {
       <main className="app-main">
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   );
 }

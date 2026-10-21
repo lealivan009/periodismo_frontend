@@ -73,26 +73,6 @@ a:hover {
     );
 }
 
-.brand-mark {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  font-family: var(--serif);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin-bottom: 28px;
-}
-
-.brand-mark.sm {
-  width: 36px;
-  height: 36px;
-  margin: 0;
-  font-size: 13px;
-}
-
 .brand-kicker,
 .eyebrow {
   margin: 0 0 12px;
@@ -317,6 +297,8 @@ textarea {
 
 .app-shell {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-nav {
@@ -823,9 +805,76 @@ textarea {
 }
 
 .app-main {
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: 28px 20px 64px;
+  flex: 1;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: rgba(243, 245, 248, 0.92);
+  padding: 28px 24px;
+}
+
+.site-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(180px, 1fr) auto;
+  gap: 28px 40px;
+  align-items: start;
+}
+
+.site-footer-brand strong {
+  display: block;
+}
+
+.site-footer strong {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.site-footer p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.site-footer p.site-footer-label {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.site-footer nav a {
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.site-footer nav a:hover {
+  text-decoration: underline;
+}
+
+.site-footer p.site-footer-copy {
+  max-width: 1080px;
+  margin: 22px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .form-grid {
@@ -1228,6 +1277,14 @@ textarea {
     align-items: center;
     gap: 10px;
     padding: 12px 14px;
+  }
+
+  .site-footer {
+    padding: 22px 14px;
+  }
+
+  .site-footer-inner {
+    grid-template-columns: 1fr;
   }
 
   .app-brand {

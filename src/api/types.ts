@@ -87,7 +87,7 @@ export function roleLabel(role: Role) {
     return "Administrador";
   }
   if (role === "JOURNALIST") {
-    return "Periodista";
+    return "Profesional";
   }
   return "Lector";
 }

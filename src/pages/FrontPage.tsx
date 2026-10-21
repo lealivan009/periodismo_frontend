@@ -48,15 +48,15 @@ export function FrontPage() {
           {personal ? (
             <>
               <h2>Todavía no hay notas para vos</h2>
-              <p className="lede">Seguí periodistas para ver sus notas en la portada.</p>
+              <p className="lede">Seguí a los profesionales que te interesan para ver sus notas en la portada.</p>
               <p>
-                <Link to="/periodistas">Ver periodistas</Link>
+                <Link to="/periodistas">Ver profesionales</Link>
               </p>
             </>
           ) : (
             <>
               <h2>Todavía no hay notas publicadas</h2>
-              <p className="lede">Cuando un periodista verificado publique, van a aparecer acá.</p>
+              <p className="lede">Cuando un profesional publique, las notas van a aparecer acá.</p>
             </>
           )}
         </section>

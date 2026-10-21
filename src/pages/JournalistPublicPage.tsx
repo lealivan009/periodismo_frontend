@@ -21,6 +21,7 @@ export function JournalistPublicPage() {
       return;
     }
     let cancelled = false;
+    setProfile(null);
     setError(null);
     api
       .getJournalist(id)
@@ -32,7 +33,7 @@ export function JournalistPublicPage() {
       .catch((err: unknown) => {
         if (!cancelled) {
           setProfile(null);
-          setError(err instanceof Error ? err.message : "No se encontró el periodista");
+          setError(err instanceof Error ? err.message : "No se encontró el perfil");
         }
       });
     return () => {
@@ -41,7 +42,11 @@ export function JournalistPublicPage() {
   }, [id, user?.id]);
 
   useEffect(() => {
-    if (profile?.username && id !== profile.username) {
+    if (!profile?.username || !id) {
+      return;
+    }
+    const samePerson = id === profile.id || id.toLowerCase() === profile.username.toLowerCase();
+    if (samePerson && id !== profile.username) {
       navigate(journalistPath(profile), { replace: true });
     }
   }, [id, navigate, profile]);
@@ -107,7 +112,7 @@ export function JournalistPublicPage() {
             </span>
           )}
           <div>
-            <p className="eyebrow">{profile.specialty || "Periodista"}</p>
+            <p className="eyebrow">{profile.specialty || "Profesional"}</p>
             <h1>
               {displayName(profile)}
               <VerifiedBadge />
