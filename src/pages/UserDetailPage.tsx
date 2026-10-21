@@ -6,6 +6,7 @@ import {
   emptyProfile,
   profileFromUser,
   profilePayload,
+  roleLabel,
   type Role,
   type User,
 } from "../api/types";
@@ -171,7 +172,7 @@ export function UserDetailPage() {
         <dl className="meta">
           <div>
             <dt>Rol</dt>
-            <dd>{user.role === "ADMIN" ? "Administrador" : "Usuario"}</dd>
+            <dd>{roleLabel(user.role)}</dd>
           </div>
           <div>
             <dt>Estado</dt>
@@ -224,7 +225,7 @@ export function UserDetailPage() {
           <div className="settings-row">
             <div>
               <strong>Rol</strong>
-              <p>Define si puede administrar usuarios.</p>
+              <p>Lector, periodista verificado o administrador. Cambiar el rol cierra la sesión de esa persona.</p>
             </div>
             <select
               id="detailRole"
@@ -238,7 +239,8 @@ export function UserDetailPage() {
                 }
               }}
             >
-              <option value="USER">Usuario</option>
+              <option value="READER">Lector</option>
+              <option value="JOURNALIST">Periodista (verificado)</option>
               <option value="ADMIN">Administrador</option>
             </select>
           </div>

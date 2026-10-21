@@ -12,10 +12,23 @@ interface AuthContextValue {
     email: string,
     password: string,
     profile?: ProfileFields
-  ) => Promise<void>;
+  ) => Promise<User>;
+  registerJournalist: (form: FormData) => Promise<User>;
   logout: () => Promise<void>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
-  updateProfile: (input: { firstName: string; lastName: string } & ProfileFields) => Promise<void>;
+  updateProfile: (
+    input: {
+      firstName: string;
+      lastName: string;
+      bio?: string | null;
+      specialty?: string | null;
+      xUrl?: string | null;
+      instagramUrl?: string | null;
+      facebookUrl?: string | null;
+    } & ProfileFields
+  ) => Promise<void>;
+  updateAvatar: (file: File) => Promise<void>;
+  replaceDegree: (file: File) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -63,9 +76,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       register: async (firstName, lastName, email, password, profile) => {
         const session = await api.register(firstName, lastName, email, password, profile);
         setUser(session.user);
+        return session.user;
+      },
+      registerJournalist: async (form) => {
+        const session = await api.registerJournalist(form);
+        setUser(session.user);
+        return session.user;
       },
       updateProfile: async (input) => {
         const next = await api.updateProfile(input);
+        setUser(next);
+      },
+      updateAvatar: async (file) => {
+        const next = await api.updateAvatar(file);
+        setUser(next);
+      },
+      replaceDegree: async (file) => {
+        const next = await api.replaceDegree(file);
         setUser(next);
       },
       logout: async () => {

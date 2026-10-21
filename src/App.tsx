@@ -4,20 +4,35 @@ import { GuestRoute } from "./auth/GuestRoute";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { RegisterRoute } from "./auth/RegisterRoute";
 import { AppShell } from "./components/AppShell";
+import { PublicShell } from "./components/PublicShell";
 import { AccountPage } from "./pages/AccountPage";
+import { ArticlePage } from "./pages/ArticlePage";
+import { EditorPage } from "./pages/EditorPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { FrontPage } from "./pages/FrontPage";
 import { HomePage } from "./pages/HomePage";
+import { JournalistPublicPage } from "./pages/JournalistPublicPage";
+import { JournalistsPage } from "./pages/JournalistsPage";
 import { LoginPage } from "./pages/LoginPage";
+import { NewsroomPage } from "./pages/NewsroomPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { UserDetailPage } from "./pages/UserDetailPage";
 import { UsersPage } from "./pages/UsersPage";
+import { VerifyJournalistsPage } from "./pages/VerifyJournalistsPage";
 
 export function App() {
   return (
     <Routes>
+      <Route element={<PublicShell />}>
+        <Route path="/" element={<FrontPage />} />
+        <Route path="/categoria/:slug" element={<FrontPage />} />
+        <Route path="/nota/:slug" element={<ArticlePage />} />
+        <Route path="/periodistas" element={<JournalistsPage />} />
+        <Route path="/periodistas/:id" element={<JournalistPublicPage />} />
+      </Route>
       <Route element={<GuestRoute />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -31,14 +46,17 @@ export function App() {
           <Route path="/app" element={<HomePage />} />
           <Route path="/app/profile" element={<ProfilePage />} />
           <Route path="/app/account" element={<AccountPage />} />
+          <Route path="/app/redaccion" element={<NewsroomPage />} />
+          <Route path="/app/redaccion/:id" element={<EditorPage />} />
           <Route element={<AdminRoute />}>
             <Route path="/app/users" element={<UsersPage />} />
             <Route path="/app/users/:id" element={<UserDetailPage />} />
             <Route path="/app/settings" element={<SettingsPage />} />
+            <Route path="/admin/verify-journalists" element={<VerifyJournalistsPage />} />
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

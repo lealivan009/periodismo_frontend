@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { displayName, type User } from "../api/types";
+import { mediaUrl } from "../api/client";
+import { displayName, roleLabel, type User } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 
 function initials(user: User) {
@@ -8,6 +9,18 @@ function initials(user: User) {
   const b = user.lastName?.trim()?.[0] ?? "";
   const value = `${a}${b}`.toUpperCase();
   return value || user.email.slice(0, 2).toUpperCase();
+}
+
+function UserAvatar({ user, large = false }: { user: User; large?: boolean }) {
+  const photo = mediaUrl(user.avatarUrl);
+  if (photo) {
+    return <img className={`avatar-photo${large ? " lg" : ""}`} src={photo} alt="" />;
+  }
+  return (
+    <span className={`avatar${large ? " lg" : ""}`} aria-hidden>
+      {initials(user)}
+    </span>
+  );
 }
 
 export function UserMenu() {
@@ -57,12 +70,10 @@ export function UserMenu() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="avatar" aria-hidden>
-          {initials(user)}
-        </span>
+        <UserAvatar user={user} />
         <span className="user-menu-copy">
           <strong>{displayName(user)}</strong>
-          <small>{user.role === "ADMIN" ? "Administrador" : "Usuario"}</small>
+          <small>{roleLabel(user.role)}</small>
         </span>
         <span className="user-menu-caret" aria-hidden />
       </button>
@@ -70,14 +81,15 @@ export function UserMenu() {
       {open ? (
         <div className="user-menu-panel" role="menu">
           <div className="user-menu-head">
-            <span className="avatar lg" aria-hidden>
-              {initials(user)}
-            </span>
+            <UserAvatar user={user} large />
             <div>
               <strong>{displayName(user)}</strong>
               <p>{user.email}</p>
             </div>
           </div>
+          <Link role="menuitem" to="/app" onClick={() => setOpen(false)}>
+            Panel
+          </Link>
           <Link role="menuitem" to="/app/profile" onClick={() => setOpen(false)}>
             Mi perfil
           </Link>

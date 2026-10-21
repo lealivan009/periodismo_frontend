@@ -1,4 +1,23 @@
-import type { ApiError, AppSettings, AuthResponse, ProfileFields, PublicSettings, Role, User, UserPage } from "./types";
+import type {
+  ApiError,
+  AppNotification,
+  AppSettings,
+  Article,
+  ArticleDraft,
+  ArticleSummary,
+  AuthResponse,
+  Category,
+  JournalistApplication,
+  JournalistCard,
+  JournalistProfile,
+  ProfileFields,
+  PublicSettings,
+  RelationState,
+  Role,
+  User,
+  UserPage,
+  VerificationStatus,
+} from "./types";
 
 function resolveApiUrl(): string {
   const runtime = window.__APP_CONFIG__?.API_URL?.trim();
@@ -10,6 +29,16 @@ function resolveApiUrl(): string {
     return fromEnv.replace(/\/$/, "");
   }
   return "";
+}
+
+export function mediaUrl(path: string | null | undefined) {
+  if (!path) {
+    return null;
+  }
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+  return `${resolveApiUrl()}${path}`;
 }
 
 async function parseError(response: Response): Promise<string> {
@@ -129,7 +158,17 @@ export class ApiClient {
     });
   }
 
-  updateProfile(input: { firstName: string; lastName: string } & ProfileFields) {
+  updateProfile(
+    input: {
+      firstName: string;
+      lastName: string;
+      bio?: string | null;
+      specialty?: string | null;
+      xUrl?: string | null;
+      instagramUrl?: string | null;
+      facebookUrl?: string | null;
+    } & ProfileFields
+  ) {
     return this.request<User>("/api/auth/me", {
       method: "PATCH",
       body: input,
@@ -214,37 +253,166 @@ export class ApiClient {
     });
   }
 
+  registerJournalist(form: FormData) {
+    return this.request<AuthResponse>("/api/auth/register-journalist", {
+      method: "POST",
+      auth: false,
+      form,
+    }).then((auth) => {
+      this.setSession(auth);
+      return auth;
+    });
+  }
+
+  updateAvatar(file: File) {
+    const form = new FormData();
+    form.set("file", file);
+    return this.request<User>("/api/auth/me/avatar", { method: "POST", form });
+  }
+
+  listCategories() {
+    return this.request<Category[]>("/api/categories", { auth: false });
+  }
+
+  listArticles(category?: string, auth = false) {
+    const query = category ? `?category=${encodeURIComponent(category)}` : "";
+    return this.request<ArticleSummary[]>(`/api/articles${query}`, { auth });
+  }
+
+  getArticleBySlug(slug: string) {
+    return this.request<Article>(`/api/articles/slug/${encodeURIComponent(slug)}`, { auth: false });
+  }
+
+  recordView(slug: string, visitorId: string) {
+    return this.request<{ viewCount: number }>(`/api/articles/slug/${encodeURIComponent(slug)}/view`, {
+      method: "POST",
+      body: { visitorId },
+    });
+  }
+
+  myArticles() {
+    return this.request<Article[]>("/api/articles/mine");
+  }
+
+  getArticle(id: string) {
+    return this.request<Article>(`/api/articles/${id}`);
+  }
+
+  createArticle(input: ArticleDraft) {
+    return this.request<Article>("/api/articles", { method: "POST", body: input });
+  }
+
+  updateArticle(id: string, input: Partial<ArticleDraft>) {
+    return this.request<Article>(`/api/articles/${id}`, { method: "PUT", body: input });
+  }
+
+  publishArticle(id: string) {
+    return this.request<Article>(`/api/articles/${id}/publish`, { method: "POST" });
+  }
+
+  archiveArticle(id: string) {
+    return this.request<Article>(`/api/articles/${id}/archive`, { method: "POST" });
+  }
+
+  uploadCover(id: string, file: File) {
+    const form = new FormData();
+    form.set("file", file);
+    return this.request<Article>(`/api/articles/${id}/cover`, { method: "POST", form });
+  }
+
+  listJournalists() {
+    return this.request<JournalistCard[]>("/api/journalists", { auth: false });
+  }
+
+  getJournalist(id: string) {
+    return this.request<JournalistProfile>(`/api/journalists/${id}`);
+  }
+
+  follow(id: string) {
+    return this.request<RelationState>(`/api/journalists/${id}/follow`, { method: "POST" });
+  }
+
+  unfollow(id: string) {
+    return this.request<RelationState>(`/api/journalists/${id}/follow`, { method: "DELETE" });
+  }
+
+  subscribe(id: string) {
+    return this.request<RelationState>(`/api/journalists/${id}/subscribe`, { method: "POST" });
+  }
+
+  unsubscribe(id: string) {
+    return this.request<RelationState>(`/api/journalists/${id}/subscribe`, { method: "DELETE" });
+  }
+
+  replaceDegree(file: File) {
+    const form = new FormData();
+    form.set("degree", file);
+    return this.request<User>("/api/journalists/me/degree", { method: "POST", form });
+  }
+
+  listApplications(status: VerificationStatus = "PENDING") {
+    return this.request<JournalistApplication[]>(`/api/admin/journalists?status=${status}`);
+  }
+
+  approveJournalist(id: string) {
+    return this.request<JournalistApplication>(`/api/admin/journalists/${id}/approve`, { method: "POST" });
+  }
+
+  rejectJournalist(id: string) {
+    return this.request<JournalistApplication>(`/api/admin/journalists/${id}/reject`, { method: "POST" });
+  }
+
+  degreeDocument(id: string) {
+    return this.requestBlob(`/api/admin/journalists/${id}/document`);
+  }
+
+  adminArticles() {
+    return this.request<ArticleSummary[]>("/api/admin/articles");
+  }
+
+  adminArchiveArticle(id: string) {
+    return this.request<ArticleSummary>(`/api/admin/articles/${id}/archive`, { method: "POST" });
+  }
+
+  adminCategories() {
+    return this.request<Category[]>("/api/admin/categories");
+  }
+
+  createCategory(name: string) {
+    return this.request<Category>("/api/admin/categories", { method: "POST", body: { name } });
+  }
+
+  updateCategory(id: string, input: { name?: string; active?: boolean }) {
+    return this.request<Category>(`/api/admin/categories/${id}`, { method: "PATCH", body: input });
+  }
+
+  listNotifications() {
+    return this.request<AppNotification[]>("/api/notifications");
+  }
+
+  markNotificationRead(id: string) {
+    return this.request<AppNotification>(`/api/notifications/${id}/read`, { method: "POST" });
+  }
+
+  private async requestBlob(path: string): Promise<Blob> {
+    const response = await this.send(path, { method: "GET", auth: true, retry: true });
+    if (!response.ok) {
+      throw new Error(await parseError(response));
+    }
+    return response.blob();
+  }
+
   private async request<T>(
     path: string,
     options: {
       method?: string;
       body?: unknown;
+      form?: FormData;
       auth?: boolean;
       retry?: boolean;
     } = {}
   ): Promise<T> {
-    const { method = "GET", body, auth = true, retry = true } = options;
-    const headers: Record<string, string> = {};
-    if (body !== undefined) {
-      headers["Content-Type"] = "application/json";
-    }
-    if (auth && this.accessToken) {
-      headers.Authorization = `Bearer ${this.accessToken}`;
-    }
-
-    const response = await fetch(`${resolveApiUrl()}${path}`, {
-      method,
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
-    });
-
-    if (response.status === 401 && auth && retry && this.refreshToken) {
-      const ok = await this.refreshOnce();
-      if (ok) {
-        return this.request<T>(path, { ...options, retry: false });
-      }
-    }
-
+    const response = await this.send(path, options);
     if (!response.ok) {
       throw new Error(await parseError(response));
     }
@@ -253,6 +421,44 @@ export class ApiClient {
     }
     const text = await response.text();
     return text ? (JSON.parse(text) as T) : (undefined as T);
+  }
+
+  private async send(
+    path: string,
+    options: {
+      method?: string;
+      body?: unknown;
+      form?: FormData;
+      auth?: boolean;
+      retry?: boolean;
+    }
+  ): Promise<Response> {
+    const { method = "GET", body, form, auth = true, retry = true } = options;
+    const headers: Record<string, string> = {};
+    let payload: BodyInit | undefined;
+    if (form) {
+      payload = form;
+    } else if (body !== undefined) {
+      headers["Content-Type"] = "application/json";
+      payload = JSON.stringify(body);
+    }
+    if (auth && this.accessToken) {
+      headers.Authorization = `Bearer ${this.accessToken}`;
+    }
+
+    const response = await fetch(`${resolveApiUrl()}${path}`, {
+      method,
+      headers,
+      body: payload,
+    });
+
+    if (response.status === 401 && auth && retry && this.refreshToken) {
+      const ok = await this.refreshOnce();
+      if (ok) {
+        return this.send(path, { ...options, retry: false });
+      }
+    }
+    return response;
   }
 
   private refreshOnce() {

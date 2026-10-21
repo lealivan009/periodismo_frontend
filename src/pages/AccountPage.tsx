@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { roleLabel, verificationLabel } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { Field } from "../components/AuthForm";
 import { PasswordHint } from "../components/PasswordHint";
@@ -51,8 +52,14 @@ export function AccountPage() {
           </div>
           <div>
             <dt>Rol</dt>
-            <dd>{user.role === "ADMIN" ? "Administrador" : "Usuario"}</dd>
+            <dd>{roleLabel(user.role)}</dd>
           </div>
+          {user.role === "JOURNALIST" ? (
+            <div>
+              <dt>Verificación</dt>
+              <dd>{verificationLabel(user.verificationStatus)}</dd>
+            </div>
+          ) : null}
           <div>
             <dt>Estado</dt>
             <dd>

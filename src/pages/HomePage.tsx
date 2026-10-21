@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { displayName, type User } from "../api/types";
+import { api } from "../api/client";
+import { displayName, roleLabel, type AppNotification, type User } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 
 function profileScore(user: User) {
@@ -20,6 +22,26 @@ function profileScore(user: User) {
 
 export function HomePage() {
   const { user } = useAuth();
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .listNotifications()
+      .then((items) => {
+        if (!cancelled) {
+          setNotifications(items);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setNotifications([]);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   if (!user) {
     return null;
@@ -39,8 +61,7 @@ export function HomePage() {
             {greeting}, {user.firstName}
           </h1>
           <p className="lede">
-            Tu espacio personal. Acá vas a conectar el resto del producto; por ahora gestioná tu perfil y tu
-            cuenta.
+            Tu panel. Desde acá vas a la portada, a tu perfil y, si sos periodista verificado, a la redacción.
           </p>
         </div>
         <div className="hero-home-side">
@@ -49,7 +70,7 @@ export function HomePage() {
             {(user.lastName?.[0] ?? "").toUpperCase()}
           </span>
           <p className="hero-home-email">{user.email}</p>
-          <span className="pill on">{user.role === "ADMIN" ? "Administrador" : "Usuario"}</span>
+          <span className="pill on">{roleLabel(user.role)}</span>
         </div>
       </section>
 
@@ -70,7 +91,45 @@ export function HomePage() {
         </section>
       ) : null}
 
+      {notifications.length > 0 ? (
+        <section className="session-card">
+          <h2>Avisos</h2>
+          <ul className="category-list">
+            {notifications.map((item) => (
+              <li key={item.id}>
+                <span>
+                  {item.authorName} publicó{" "}
+                  <Link to={`/nota/${item.articleSlug}`}>{item.articleTitle}</Link>
+                </span>
+                {!item.read ? (
+                  <button
+                    type="button"
+                    className="text-btn"
+                    onClick={() => {
+                      void api.markNotificationRead(item.id).then((next) => {
+                        setNotifications((current) => current.map((entry) => (entry.id === next.id ? next : entry)));
+                      });
+                    }}
+                  >
+                    Marcar leído
+                  </button>
+                ) : (
+                  <span className="hint-inline">Leído</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <section className="home-grid">
+        <Link className="home-tile" to="/">
+          <span className="home-tile-icon" aria-hidden>
+            ▣
+          </span>
+          <strong>Portada</strong>
+          <p>Notas publicadas por periodistas verificados.</p>
+        </Link>
         <Link className="home-tile" to="/app/profile">
           <span className="home-tile-icon" aria-hidden>
             ◇
@@ -85,14 +144,32 @@ export function HomePage() {
           <strong>Cuenta y seguridad</strong>
           <p>Cambiá tu contraseña y revisá el estado de la cuenta.</p>
         </Link>
-        {user.role === "ADMIN" ? (
-          <Link className="home-tile" to="/app/users">
+        {user.role === "JOURNALIST" ? (
+          <Link className="home-tile" to="/app/redaccion">
             <span className="home-tile-icon" aria-hidden>
-              ▤
+              ✎
             </span>
-            <strong>Usuarios</strong>
-            <p>Administrá altas, roles y estados.</p>
+            <strong>Redacción</strong>
+            <p>Borradores y publicación, cuando tu cuenta esté aprobada.</p>
           </Link>
+        ) : null}
+        {user.role === "ADMIN" ? (
+          <>
+            <Link className="home-tile" to="/app/users">
+              <span className="home-tile-icon" aria-hidden>
+                ▤
+              </span>
+              <strong>Usuarios</strong>
+              <p>Administrá altas, roles y estados.</p>
+            </Link>
+            <Link className="home-tile" to="/admin/verify-journalists">
+              <span className="home-tile-icon" aria-hidden>
+                ✓
+              </span>
+              <strong>Verificación</strong>
+              <p>Aprobá periodistas y archivá notas.</p>
+            </Link>
+          </>
         ) : null}
       </section>
 

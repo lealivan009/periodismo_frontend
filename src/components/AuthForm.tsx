@@ -10,6 +10,7 @@ interface FieldProps {
   extra?: ReactNode;
   required?: boolean;
   max?: string;
+  placeholder?: string;
 }
 
 export function Field({
@@ -22,6 +23,7 @@ export function Field({
   extra,
   required = true,
   max,
+  placeholder,
 }: FieldProps) {
   return (
     <label className="field" htmlFor={id}>
@@ -38,6 +40,7 @@ export function Field({
         onChange={(event) => onChange(event.target.value)}
         required={required}
         max={max}
+        placeholder={placeholder}
       />
     </label>
   );

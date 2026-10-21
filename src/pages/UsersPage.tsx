@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
 import type { Role, User } from "../api/types";
+import { roleLabel } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { Field } from "../components/AuthForm";
 import { PasswordHint } from "../components/PasswordHint";
@@ -30,7 +31,7 @@ export function UsersPage() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("USER");
+  const [role, setRole] = useState<Role>("READER");
   const [phone, setPhone] = useState("");
   const [creating, setCreating] = useState(false);
 
@@ -103,7 +104,7 @@ export function UsersPage() {
       setLastName("");
       setEmail("");
       setPassword("");
-      setRole("USER");
+      setRole("READER");
       setPhone("");
       setNotice("Usuario creado");
       setSearchInput("");
@@ -163,7 +164,8 @@ export function UsersPage() {
           <label className="field" htmlFor="newRole">
             <span className="field-label">Rol</span>
             <select id="newRole" value={role} onChange={(event) => setRole(event.target.value as Role)}>
-              <option value="USER">Usuario</option>
+              <option value="READER">Lector</option>
+              <option value="JOURNALIST">Periodista (verificado)</option>
               <option value="ADMIN">Administrador</option>
             </select>
           </label>
@@ -218,7 +220,8 @@ export function UsersPage() {
               }}
             >
               <option value="all">Todos</option>
-              <option value="USER">Usuario</option>
+              <option value="READER">Lector</option>
+              <option value="JOURNALIST">Periodista</option>
               <option value="ADMIN">Admin</option>
             </select>
           </label>
@@ -272,7 +275,7 @@ export function UsersPage() {
                         <td>{user.firstName}</td>
                         <td>{user.email}</td>
                         <td>{user.phone || "—"}</td>
-                        <td>{user.role === "ADMIN" ? "Admin" : "Usuario"}</td>
+                        <td>{roleLabel(user.role)}</td>
                         <td>
                           <span className={user.enabled === false ? "pill off" : "pill on"}>
                             {user.enabled === false ? "Inactivo" : "Activo"}
