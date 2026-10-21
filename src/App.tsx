@@ -45,6 +45,7 @@ export function App() {
         <Route element={<AppShell />}>
           <Route path="/app" element={<HomePage />} />
           <Route path="/app/profile" element={<ProfilePage />} />
+          <Route path="/app/profile/editar" element={<ProfilePage />} />
           <Route path="/app/account" element={<AccountPage />} />
           <Route path="/app/redaccion" element={<NewsroomPage />} />
           <Route path="/app/redaccion/:id" element={<EditorPage />} />

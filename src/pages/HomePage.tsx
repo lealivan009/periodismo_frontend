@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
-import { displayName, roleLabel, type AppNotification, type User } from "../api/types";
+import { canPublish, displayName, journalistPath, roleLabel, type AppNotification, type User } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 
 function profileScore(user: User) {
@@ -91,8 +91,8 @@ export function HomePage() {
               <span className="progress-fill" style={{ width: `${score}%` }} />
             </div>
           </div>
-          <Link className="btn-primary btn-inline" to="/app/profile">
-            Ir al perfil
+          <Link className="btn-primary btn-inline" to="/app/profile/editar">
+            Completar datos
           </Link>
         </section>
       ) : null}
@@ -136,12 +136,16 @@ export function HomePage() {
           <strong>Portada</strong>
           <p>Notas publicadas por periodistas verificados.</p>
         </Link>
-        <Link className="home-tile" to="/app/profile">
+        <Link className="home-tile" to={canPublish(user) ? journalistPath(user) : "/app/profile"}>
           <span className="home-tile-icon" aria-hidden>
             ◇
           </span>
           <strong>Mi perfil</strong>
-          <p>Nombre, documento, celular y domicilio.</p>
+          <p>
+            {canPublish(user)
+              ? "Tu perfil público y las notas que publicaste."
+              : "Tu foto, tu descripción y tus datos."}
+          </p>
         </Link>
         <Link className="home-tile" to="/app/account">
           <span className="home-tile-icon" aria-hidden>

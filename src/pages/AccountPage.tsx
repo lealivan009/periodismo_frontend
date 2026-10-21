@@ -114,7 +114,7 @@ export function AccountPage() {
               <strong>Datos personales</strong>
               <p>Nombre, documento, celular y domicilio.</p>
             </div>
-            <Link className="btn-ghost" to="/app/profile">
+            <Link className="btn-ghost" to="/app/profile/editar">
               Editar perfil
             </Link>
           </div>

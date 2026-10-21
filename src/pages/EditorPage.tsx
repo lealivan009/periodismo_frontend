@@ -197,13 +197,14 @@ export function EditorPage() {
             accept="image/jpeg,image/png,image/webp"
             onChange={(event) => {
               const file = event.target.files?.[0];
+              event.target.value = "";
               if (file) {
                 void onCover(file);
               }
             }}
           />
         </label>
-        {coverSrc ? <img className="article-cover" src={coverSrc} alt="" /> : null}
+        {coverSrc ? <img key={coverSrc} className="article-cover" src={coverSrc} alt="" /> : null}
         <div className="form-actions">
           <button type="button" className="btn-ghost" disabled={saving} onClick={() => void onSave()}>
             {saving ? "Guardando…" : "Guardar borrador"}

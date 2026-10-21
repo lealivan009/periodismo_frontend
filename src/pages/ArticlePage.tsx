@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
 import { formatViews, journalistPath, type Article } from "../api/types";
@@ -7,6 +7,7 @@ export function ArticlePage() {
   const { slug } = useParams();
   const [article, setArticle] = useState<Article | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const counted = useRef<string | null>(null);
 
   useEffect(() => {
     if (!slug) {
@@ -31,23 +32,21 @@ export function ArticlePage() {
   }, [slug]);
 
   useEffect(() => {
-    if (!article || article.status !== "PUBLISHED") {
+    if (!article || article.status !== "PUBLISHED" || counted.current === article.id) {
       return;
     }
-    let cancelled = false;
+    counted.current = article.id;
+    const articleId = article.id;
     api
       .recordView(article.slug, visitorId())
       .then((result) => {
-        if (!cancelled) {
-          setArticle((current) => (current ? { ...current, viewCount: result.viewCount } : current));
-        }
+        setArticle((current) =>
+          current && current.id === articleId ? { ...current, viewCount: result.viewCount } : current
+        );
       })
       .catch(() => {
         // La nota se lee igual si el contador no responde.
       });
-    return () => {
-      cancelled = true;
-    };
   }, [article?.id, article?.slug, article?.status]);
 
   if (error) {

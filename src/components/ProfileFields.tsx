@@ -7,10 +7,12 @@ export function ProfileFields({
   idPrefix,
   values,
   onChange,
+  documentLocked = false,
 }: {
   idPrefix: string;
   values: ProfileForm;
   onChange: (next: ProfileForm) => void;
+  documentLocked?: boolean;
 }) {
   function set(key: keyof ProfileForm, value: string) {
     onChange({ ...values, [key]: value });
@@ -18,14 +20,18 @@ export function ProfileFields({
 
   return (
     <div className="form-grid">
-      <Field
-        id={`${idPrefix}Document`}
-        label="DNI / Documento"
-        value={values.documentNumber}
-        onChange={(value) => set("documentNumber", value)}
-        autoComplete="off"
-        required={false}
-      />
+      <div>
+        <Field
+          id={`${idPrefix}Document`}
+          label="DNI / Documento"
+          value={values.documentNumber}
+          onChange={(value) => set("documentNumber", value)}
+          autoComplete="off"
+          required={false}
+          readOnly={documentLocked}
+        />
+        {documentLocked ? <p className="hint-inline">El DNI no se puede modificar.</p> : null}
+      </div>
       <Field
         id={`${idPrefix}Phone`}
         label="Celular"

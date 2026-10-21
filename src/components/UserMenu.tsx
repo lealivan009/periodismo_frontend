@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { mediaUrl } from "../api/client";
-import { displayName, roleLabel, type User } from "../api/types";
+import { canPublish, displayName, journalistPath, roleLabel, type User } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 
 function initials(user: User) {
@@ -55,6 +55,8 @@ export function UserMenu() {
     return null;
   }
 
+  const publicProfile = canPublish(user) ? journalistPath(user) : null;
+
   async function onLogout() {
     setOpen(false);
     await logout();
@@ -90,8 +92,11 @@ export function UserMenu() {
           <Link role="menuitem" to="/app" onClick={() => setOpen(false)}>
             Panel
           </Link>
-          <Link role="menuitem" to="/app/profile" onClick={() => setOpen(false)}>
+          <Link role="menuitem" to={publicProfile ?? "/app/profile"} onClick={() => setOpen(false)}>
             Mi perfil
+          </Link>
+          <Link role="menuitem" to="/app/profile/editar" onClick={() => setOpen(false)}>
+            Editar perfil
           </Link>
           <Link role="menuitem" to="/app/account" onClick={() => setOpen(false)}>
             Cuenta y seguridad

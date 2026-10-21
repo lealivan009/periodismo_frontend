@@ -220,6 +220,11 @@ textarea:focus {
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
+input[readonly] {
+  color: var(--muted);
+  cursor: default;
+}
+
 textarea {
   min-height: 140px;
   resize: vertical;
@@ -760,6 +765,32 @@ textarea {
   margin-top: 16px;
 }
 
+.profile-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 28px;
+  margin: 22px 0 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.profile-facts dt {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-facts dd {
+  margin: 4px 0 0;
+}
+
+@media (max-width: 700px) {
+  .profile-facts {
+    grid-template-columns: 1fr;
+  }
+}
+
 .form-actions {
   display: flex;
   flex-wrap: wrap;
@@ -788,6 +819,7 @@ textarea {
 
 .form-actions .btn-ghost {
   border-color: var(--line);
+  text-decoration: none;
 }
 
 .app-main {
@@ -1678,7 +1710,6 @@ a.btn-ghost {
   margin: 8px 0 0;
   white-space: pre-wrap;
   line-height: 1.6;
-  max-width: 62ch;
 }
 
 .journalist-card .profile-description {

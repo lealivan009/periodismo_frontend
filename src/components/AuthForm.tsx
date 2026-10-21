@@ -11,6 +11,7 @@ interface FieldProps {
   required?: boolean;
   max?: string;
   placeholder?: string;
+  readOnly?: boolean;
 }
 
 export function Field({
@@ -24,6 +25,7 @@ export function Field({
   required = true,
   max,
   placeholder,
+  readOnly = false,
 }: FieldProps) {
   return (
     <label className="field" htmlFor={id}>
@@ -41,6 +43,7 @@ export function Field({
         required={required}
         max={max}
         placeholder={placeholder}
+        readOnly={readOnly}
       />
     </label>
   );
