@@ -47,15 +47,17 @@ export function PublicShell() {
     };
   }, []);
 
+  const home = user?.role === "ADMIN" ? "/app" : "/";
+
   return (
     <div className="app-shell">
       <header className="app-nav">
-        <NavLink to="/" className="app-brand" end>
+        <NavLink to={home} className="app-brand" end>
           <strong>Enfoque Digital</strong>
         </NavLink>
         <nav className="app-links">
-          <NavLink to="/" end>
-            Portada
+          <NavLink to={home} end>
+            {user?.role === "ADMIN" ? "Gestión" : "Portada"}
           </NavLink>
           {categories.map((category) => (
             <NavLink key={category.id} to={`/categoria/${category.slug}`}>

@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { canPublish } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
 import { SiteFooter } from "./SiteFooter";
 import { UserMenu } from "./UserMenu";
@@ -15,20 +16,30 @@ export function AppShell() {
           <strong>Enfoque Digital</strong>
         </NavLink>
         <nav className="app-links">
-          <NavLink to="/" end>
-            Portada
-          </NavLink>
-          <NavLink to="/app" end>
-            Panel
-          </NavLink>
-          {isJournalist ? <NavLink to="/app/redaccion">Redacción</NavLink> : null}
-          {isAdmin ? <NavLink to="/admin/verify-journalists">Verificación</NavLink> : null}
-          {isAdmin ? <NavLink to="/app/users">Usuarios</NavLink> : null}
           {isAdmin ? (
-            <NavLink to="/app/settings" title="Configuración del sistema">
-              Sistema
-            </NavLink>
-          ) : null}
+            <>
+              <NavLink to="/app" end>
+                Gestión
+              </NavLink>
+              <NavLink to="/diario">Diario</NavLink>
+              <NavLink to="/admin/verify-journalists">Verificación</NavLink>
+              <NavLink to="/app/users">Usuarios</NavLink>
+              <NavLink to="/app/settings" title="Configuración del sistema">
+                Sistema
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to="/" end>
+                Portada
+              </NavLink>
+              <NavLink to="/app" end>
+                Panel
+              </NavLink>
+              {user && canPublish(user) ? <NavLink to="/app/estadisticas">Estadísticas</NavLink> : null}
+              {isJournalist ? <NavLink to="/app/redaccion">Redacción</NavLink> : null}
+            </>
+          )}
         </nav>
         <UserMenu />
       </header>

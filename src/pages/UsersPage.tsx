@@ -173,7 +173,7 @@ export function UsersPage() {
             <span className="field-label">Rol</span>
             <select id="newRole" value={role} onChange={(event) => setRole(event.target.value as Role)}>
               <option value="READER">Lector</option>
-              <option value="JOURNALIST">Periodista (verificado)</option>
+              <option value="JOURNALIST">Profesional</option>
               <option value="ADMIN">Administrador</option>
             </select>
           </label>
@@ -229,7 +229,7 @@ export function UsersPage() {
             >
               <option value="all">Todos</option>
               <option value="READER">Lector</option>
-              <option value="JOURNALIST">Periodista</option>
+              <option value="JOURNALIST">Profesional</option>
               <option value="ADMIN">Admin</option>
             </select>
           </label>

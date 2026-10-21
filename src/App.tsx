@@ -7,6 +7,7 @@ import { AppShell } from "./components/AppShell";
 import { PublicShell } from "./components/PublicShell";
 import { AccountPage } from "./pages/AccountPage";
 import { ArticlePage } from "./pages/ArticlePage";
+import { DashboardPage } from "./pages/DashboardPage";
 import { EditorPage } from "./pages/EditorPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { FrontPage } from "./pages/FrontPage";
@@ -33,6 +34,7 @@ export function App() {
     <Routes>
       <Route element={<PublicShell />}>
         <Route path="/" element={<FrontPage />} />
+        <Route path="/diario" element={<FrontPage />} />
         <Route path="/categoria/:slug" element={<FrontPage />} />
         <Route path="/nota/:slug" element={<ArticlePage />} />
         <Route path="/profesionales" element={<JournalistsPage />} />
@@ -54,10 +56,12 @@ export function App() {
           <Route path="/app/profile" element={<ProfilePage />} />
           <Route path="/app/profile/editar" element={<ProfilePage />} />
           <Route path="/app/account" element={<AccountPage />} />
+          <Route path="/app/estadisticas" element={<DashboardPage />} />
           <Route path="/app/redaccion" element={<NewsroomPage />} />
           <Route path="/app/redaccion/:id" element={<EditorPage />} />
           <Route element={<AdminRoute />}>
             <Route path="/app/users" element={<UsersPage />} />
+            <Route path="/app/users/:id/estadisticas" element={<DashboardPage />} />
             <Route path="/app/users/:id" element={<UserDetailPage />} />
             <Route path="/app/settings" element={<SettingsPage />} />
             <Route path="/admin/verify-journalists" element={<VerifyJournalistsPage />} />

@@ -5,7 +5,9 @@ import type {
   Article,
   ArticleDraft,
   ArticleSummary,
+  AdminOverview,
   AuthResponse,
+  AuthorStats,
   Category,
   JournalistApplication,
   JournalistCard,
@@ -300,6 +302,18 @@ export class ApiClient {
 
   myArticles() {
     return this.request<Article[]>("/api/articles/mine");
+  }
+
+  authorStats() {
+    return this.request<AuthorStats>("/api/articles/stats");
+  }
+
+  adminAuthorStats(id: string) {
+    return this.request<AuthorStats>(`/api/admin/journalists/${id}/stats`);
+  }
+
+  adminOverview() {
+    return this.request<AdminOverview>("/api/admin/overview");
   }
 
   getArticle(id: string) {

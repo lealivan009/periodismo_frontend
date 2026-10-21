@@ -5,6 +5,7 @@ import {
   displayName,
   emptyProfile,
   formatDateTime,
+  journalistPath,
   profileFromUser,
   profilePayload,
   roleLabel,
@@ -160,6 +161,18 @@ export function UserDetailPage() {
         <p className="eyebrow">Ficha</p>
         <h1>{displayName(user)}</h1>
         <p className="lede">{user.email}</p>
+        {user.role === "JOURNALIST" ? (
+          <div className="form-actions">
+            {user.verificationStatus === "APPROVED" && user.enabled !== false ? (
+              <Link className="btn-ghost btn-inline" to={journalistPath(user)}>
+                Ver perfil
+              </Link>
+            ) : null}
+            <Link className="btn-primary btn-inline" to={`/app/users/${user.id}/estadisticas`}>
+              Ver estadísticas
+            </Link>
+          </div>
+        ) : null}
         <dl className="meta">
           <div>
             <dt>Rol</dt>
@@ -231,7 +244,7 @@ export function UserDetailPage() {
               }}
             >
               <option value="READER">Lector</option>
-              <option value="JOURNALIST">Periodista (verificado)</option>
+              <option value="JOURNALIST">Profesional</option>
               <option value="ADMIN">Administrador</option>
             </select>
           </div>

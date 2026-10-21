@@ -90,14 +90,22 @@ export function UserMenu() {
             </div>
           </div>
           <Link role="menuitem" to="/app" onClick={() => setOpen(false)}>
-            Panel
+            {user.role === "ADMIN" ? "Gestión" : "Panel"}
           </Link>
-          <Link role="menuitem" to={publicProfile ?? "/app/profile"} onClick={() => setOpen(false)}>
-            Mi perfil
-          </Link>
-          <Link role="menuitem" to="/app/profile/editar" onClick={() => setOpen(false)}>
-            Editar perfil
-          </Link>
+          {user.role === "ADMIN" ? (
+            <Link role="menuitem" to="/app/users" onClick={() => setOpen(false)}>
+              Usuarios
+            </Link>
+          ) : (
+            <>
+              <Link role="menuitem" to={publicProfile ?? "/app/profile"} onClick={() => setOpen(false)}>
+                Mi perfil
+              </Link>
+              <Link role="menuitem" to="/app/profile/editar" onClick={() => setOpen(false)}>
+                Editar perfil
+              </Link>
+            </>
+          )}
           <Link role="menuitem" to="/app/account" onClick={() => setOpen(false)}>
             Cuenta y seguridad
           </Link>

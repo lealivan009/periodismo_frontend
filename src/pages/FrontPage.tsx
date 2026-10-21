@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import type { ArticleSummary } from "../api/types";
 import { useAuth } from "../auth/AuthContext";
@@ -7,8 +7,10 @@ import { ArticleCard } from "../components/ArticleCard";
 
 export function FrontPage() {
   const { slug } = useParams();
+  const { pathname } = useLocation();
   const { user } = useAuth();
-  const personal = Boolean(user) && !slug;
+  const paper = pathname === "/diario" || Boolean(slug);
+  const personal = Boolean(user) && user?.role !== "ADMIN" && !paper;
   const [articles, setArticles] = useState<ArticleSummary[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +40,10 @@ export function FrontPage() {
       cancelled = true;
     };
   }, [slug, personal, user?.id]);
+
+  if (user?.role === "ADMIN" && !paper) {
+    return <Navigate to="/app" replace />;
+  }
 
   return (
     <>

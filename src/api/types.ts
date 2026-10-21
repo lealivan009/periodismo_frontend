@@ -116,6 +116,37 @@ export interface Category {
   active: boolean;
 }
 
+export interface AuthorStats {
+  totalViews: number;
+  viewsThisMonth: number;
+  publishedArticles: number;
+  followers: number;
+  subscribers: number;
+  months: { year: number; month: number; views: number }[];
+  articles: { id: string; title: string; slug: string; views: number }[];
+  authorName: string;
+  authorUsername: string | null;
+  publicProfile: boolean;
+}
+
+export interface AdminOverview {
+  totalViews: number;
+  viewsThisMonth: number;
+  publishedArticles: number;
+  professionals: number;
+  pendingProfessionals: number;
+  readers: number;
+  months: { year: number; month: number; views: number }[];
+  ranking: {
+    id: string;
+    name: string;
+    username: string | null;
+    views: number;
+    articles: number;
+    publicProfile: boolean;
+  }[];
+}
+
 export interface ArticleSummary {
   id: string;
   title: string;

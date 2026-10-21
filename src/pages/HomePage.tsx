@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, mediaUrl } from "../api/client";
 import { canPublish, displayName, journalistPath, roleLabel, type AppNotification, type User } from "../api/types";
+import { AdminHome } from "./AdminHome";
 import { useAuth } from "../auth/AuthContext";
 
 function profileScore(user: User) {
@@ -46,6 +47,10 @@ export function HomePage() {
 
   if (!user) {
     return null;
+  }
+
+  if (user.role === "ADMIN") {
+    return <AdminHome />;
   }
 
   const score = profileScore(user);
@@ -154,6 +159,15 @@ export function HomePage() {
           <strong>Cuenta y seguridad</strong>
           <p>Cambiá tu contraseña y revisá el estado de la cuenta.</p>
         </Link>
+        {canPublish(user) ? (
+          <Link className="home-tile" to="/app/estadisticas">
+            <span className="home-tile-icon" aria-hidden>
+              ▤
+            </span>
+            <strong>Estadísticas</strong>
+            <p>Vistas del mes, seguidores y cómo rinde cada nota.</p>
+          </Link>
+        ) : null}
         {user.role === "JOURNALIST" ? (
           <Link className="home-tile" to="/app/redaccion">
             <span className="home-tile-icon" aria-hidden>
