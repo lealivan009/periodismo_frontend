@@ -105,6 +105,9 @@ export function JournalistPublicPage() {
               {displayName(profile)}
               <VerifiedBadge />
             </h1>
+          </div>
+        </div>
+        <div className="profile-hero-body">
             {profile.bio ? <p className="profile-description">{profile.bio}</p> : null}
             <SocialLinks xUrl={profile.xUrl} instagramUrl={profile.instagramUrl} facebookUrl={profile.facebookUrl} />
             <p className="news-card-meta">
@@ -147,7 +150,6 @@ export function JournalistPublicPage() {
                 </button>
               </p>
             ) : null}
-          </div>
         </div>
       </section>
       <h2 className="section-title">Notas publicadas</h2>
